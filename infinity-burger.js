@@ -31,7 +31,7 @@
 	var state = 0;
 	var docHeight;
 	var docWidth;
-	var icon = doc.getElementById( 'hamburger' );
+	var icon = doc.getElementById( 'infinity-burger' );
 	icon.classList.add( 'enabled' );
 
 	function addLayer() {

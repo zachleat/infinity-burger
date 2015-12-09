@@ -2,7 +2,7 @@
 
 A new kind of hamburger menu
 
-No dependencies. Cuts the mustard on `requestAnimationFrame` and `classList`.
+No library dependencies. Cuts the mustard on `requestAnimationFrame` and `classList`. Demo on [zachleat.com](http://www.zachleat.com/web/).
 
 Clicks:
 
@@ -11,3 +11,12 @@ Clicks:
 1. Resets the randomizer position to the default state (a vertical column).
 1. Resets to the initial state, a three layer hamburger menu.
 
+## Markup:
+
+```
+<div class="infinity-burger" id="infinity-burger" aria-hidden="true">
+	<div></div>
+	<div></div>
+	<div></div>
+</div>
+```
