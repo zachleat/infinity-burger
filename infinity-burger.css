@@ -1,8 +1,8 @@
 /* infinity-burger Menu */
+.infinity-burger {
+	display: none;
+}
 @media only all {
-	.infinity-burger {
-		display: none;
-	}
 	.infinity-burger.enabled {
 		display: block;
 		position: absolute;
@@ -11,20 +11,20 @@
 		width: 1.5em;
 		cursor: pointer;
 	}
-	.infinity-burger div {
+	.infinity-burger.enabled div {
 		position: relative;
 		opacity: 1;
 		transition: all .6s cubic-bezier(0.13, 0.49, 0.29, 0.87);
 	}
-	.infinity-burger div.beforeanimate {
+	.infinity-burger.enabled div.beforeanimate {
 		opacity: 0;
 	}
-	.infinity-burger div,
-	.infinity-burger div:before,
-	.infinity-burger div:after {
+	.infinity-burger.enabled div,
+	.infinity-burger.enabled div:before,
+	.infinity-burger.enabled div:after {
 		display: block;
-		border-top: 3px solid rgba(60, 96, 60, .8); //$primaryColor;
+		border-top: 3px solid #666;
 		padding-bottom: 3px;
-		// background-color: rgba( 255, 255, 255, .7 );
+		background-color: rgba( 255, 255, 255, .7 );
 	}
 }
