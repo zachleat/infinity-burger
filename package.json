@@ -2,16 +2,13 @@
   "name": "infinity-burger",
   "version": "1.0.0",
   "description": "A new kind of hamburger menu.",
-  "main": "infinity-burger.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/zachleat/infinity-burger.git"
   },
   "keywords": [
-    "hamburger"
+    "hamburger",
+    "menu"
   ],
   "author": "zachleat <zachleatherman@gmail.com> (http://zachleat.com/)",
   "license": "MIT",
