@@ -16,7 +16,8 @@
 	.infinity-burger div {
 		position: relative;
 		opacity: 1;
-		transition: all .6s cubic-bezier(0.13, 0.49, 0.29, 0.87);
+		transition: transform .6s cubic-bezier(0.13, 0.49, 0.29, 0.87),
+			opacity .6s cubic-bezier(0.13, 0.49, 0.29, 0.87);
 	}
 	.infinity-burger div.beforeanimate {
 		opacity: 0;
