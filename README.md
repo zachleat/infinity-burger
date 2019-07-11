@@ -6,9 +6,7 @@ No library dependencies. Cuts the mustard on `requestAnimationFrame` and `classL
 
 Clicks:
 
-1. Starts the infinity burger animation. Continues to the bottom of the document.
-1. Randomizes the position of the burger layers.
-1. Resets the randomizer position to the default state (a vertical column).
+1. Starts the infinity burger animation. Uses a meandering horizontal position
 1. Resets to the initial state, a three layer hamburger menu.
 
 ## Markup:
@@ -20,3 +18,8 @@ Clicks:
 	<div></div>
 </div>
 ```
+
+## Release Notes
+
+* `v1.0` and `v2.0`: Click states: (a) single vertical column (b) random position and rotation (c) resets back to vertical column (d) reset to three bars
+* `v3.0`: Simplifies the thing to two states (on and off), the menu just meanders a bit on the horizontal axis.
