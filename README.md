@@ -1,13 +1,11 @@
 # infinity-burger
 
-A new kind of hamburger menu
+A new kind of hamburger menu.
 
-No library dependencies. Cuts the mustard on `requestAnimationFrame` and `classList`. Demo on [zachleat.com](http://www.zachleat.com/web/).
+No library dependencies. Cuts the mustard on [`CSSStyleSheet#replaceSync`](https://caniuse.com/mdn-api_cssstylesheet_replacesync). Demo on [zachleat.com](http://www.zachleat.com/web/) and [GitHub Pages](http://zachleat.github.io/infinity-burger/demo.html).
 
-Clicks:
-
-1. Starts the infinity burger animation. Uses a meandering horizontal position
-1. Resets to the initial state, a three layer hamburger menu.
+1. Click once to start the animation. Uses a meandering horizontal position.
+1. Click again to resets to the initial state, a three layer hamburger menu.
 
 ## Markup:
 
