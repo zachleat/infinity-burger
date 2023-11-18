@@ -1,67 +1,118 @@
-;(function( w ) {
-	var doc = w.document;
-	var docEl = doc.documentElement;
-	var body = doc.body;
-
-	if( !( 'requestAnimationFrame' in window ) || !( 'classList' in docEl ) ) {
-		return;
+class InfinityBurger extends HTMLElement {
+	static register(tagName) {
+		if("customElements" in window) {
+			customElements.define(tagName || "infinity-burger", InfinityBurger);
+		}
 	}
 
-	function getDocHeight() {
-		return Math.max( body.scrollHeight, body.offsetHeight, docEl.clientHeight, docEl.scrollHeight, docEl.offsetHeight );
-	}
+	static classes = {
+		animate: "animating"
+	};
 
-	function getRand( min, max ) {
+	static css = `:host {
+	position: absolute;
+	top: 1em;
+	right: 1em;
+	width: 1.5em;
+	cursor: pointer;
+}
+:host div {
+	position: relative;
+	opacity: 1;
+	transition: transform .6s cubic-bezier(0.13, 0.49, 0.29, 0.87),
+		opacity .6s cubic-bezier(0.13, 0.49, 0.29, 0.87);
+}
+:host div.${InfinityBurger.classes.animate} {
+	opacity: 0;
+}
+:host div,
+:host div:before,
+:host div:after {
+	display: block;
+	border-top: 3px solid #666;
+	padding-bottom: 3px;
+	background-color: transparent;
+}`;
+
+	static getRandomNumber( min, max ) {
 		return Math.floor( Math.random() * ( max - min + 1 ) ) + min;
 	}
 
-	var previousX = 0;
-	function moveRandomHorizontal( bar ) {
-		var x = previousX += getRand(-10, 2 );
-		var transform = 'translateX(' + Math.min(x, 0) + 'px)';
-		bar.style.transform = transform;
+	get node() {
+		if(!this._node) {
+			this._node = document.createElement("div");
+		}
+		return this._node;
 	}
 
-	var state = 0;
-	var docHeight;
-	var icon = doc.getElementById( 'infinity-burger' );
-	if( icon ) {
-		icon.classList.add( 'enabled' );
+	get documentHeight() {
+		if(!this._height) {
+			let docEl = document.documentElement;
+			let body = document.body;
 
-		function addLayer() {
-			if( !docHeight ) {
-				docHeight = getDocHeight();
-			}
-			var node = doc.createElement( 'div' );
-			moveRandomHorizontal(node);
-			node.className = 'beforeanimate';
-			icon.appendChild( node );
-			icon.offsetWidth;
-			node.className = '';
-
-			if( !!state ) {
-				if( icon.offsetHeight < docHeight - 20 ) {
-					requestAnimationFrame( addLayer );
-				} // else trigger complete
-			}
+			this._height = Math.max( body.scrollHeight, body.offsetHeight, docEl.clientHeight, docEl.scrollHeight, docEl.offsetHeight );
 		}
 
-		icon.addEventListener( 'click', function() {
-			previousX = 0;
+		return this._height;
+	}
+
+	connectedCallback() {
+		// https://caniuse.com/mdn-api_cssstylesheet_replacesync
+		if(this.shadowRoot || !("replaceSync" in CSSStyleSheet.prototype)) {
+			return;
+		}
+
+		this.setAttribute("aria-hidden", "true");
+
+		let root = this.attachShadow({ mode: "closed" });
+		let sheet = new CSSStyleSheet();
+		sheet.replaceSync(InfinityBurger.css);
+		root.adoptedStyleSheets = [sheet];
+
+		this._xCoordinate = 0;
+		this._state = 0;
+
+		this.reset(root);
+
+		this.addEventListener( 'click', () => {
+			this._xCoordinate = 0;
 
 			// reset to default state (just 3 bars)
-			if( state >= 1 ) {
-				state = 0;
-
-				requestAnimationFrame(function() {
-					icon.innerHTML = '<div></div><div></div><div></div>';
-				});
+			if( this._state >= 1 ) {
+				this._state = 0;
+				requestAnimationFrame(() => this.reset(root));
 			} else {
 				// keep adding hamburger layers
-				state = 1;
-				icon.innerHTML = '';
-				requestAnimationFrame( addLayer );
+				this._state = 1;
+				requestAnimationFrame( () => this.addLayer(root) );
 			}
 		}, false );
 	}
-})( typeof global !== "undefined" ? global : this );
+
+	reset(root) {
+		root.replaceChildren();
+		for(let j=0, k=3; j<k; j++) {
+			root.appendChild(this.node.cloneNode(false));
+		}
+	}
+
+	addLayer(root) {
+		this._xCoordinate += InfinityBurger.getRandomNumber(-10, 2 );
+
+		let div = this.node.cloneNode(false);
+		div.classList.add(InfinityBurger.classes.animate);
+		div.style.transform = 'translateX(' + Math.min(this._xCoordinate, 0) + 'px)';
+		root.appendChild( div );
+
+		this.offsetWidth; // force a repaint
+		div.classList.remove(InfinityBurger.classes.animate);
+
+		if( !!this._state ) {
+			if( this.offsetHeight < this.documentHeight - 20 ) {
+				requestAnimationFrame( () => this.addLayer(root) );
+			} // else, complete
+		}
+	}
+}
+
+InfinityBurger.register();

@@ -6,6 +6,9 @@
     "type": "git",
     "url": "git+https://github.com/zachleat/infinity-burger.git"
   },
+  "scripts": {
+    "start": "npx http-server ."
+  },
   "keywords": [
     "hamburger",
     "menu"
