@@ -4,10 +4,20 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Infinity Burger</title>
+	<style>
+	body {
+		height: 200vh;
+	}
+	</style>
 	<script type="module" src="infinity-burger.js"></script>
+	<script>
+		function InfinityBurgerColor(count) {
+			return `hsl(${count * 5 % 360}, 100%, 50%)`
+		}
+	</script>
 </head>
 <body>
-	<infinity-burger></infinity-burger>
 	<a href="https://github.com/zachleat/infinity-burger">Back to the source code.</a>
+	<infinity-burger></infinity-burger>
 </body>
 </html>

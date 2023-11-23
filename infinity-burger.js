@@ -9,7 +9,12 @@ class InfinityBurger extends HTMLElement {
 		animate: "animating"
 	};
 
+	static props = {
+		height: 3 // integer
+	};
+
 	static css = `:host {
+	--ib-_color: var(--ib-color, #666);
 	position: absolute;
 	top: 1em;
 	right: 1em;
@@ -17,7 +22,6 @@ class InfinityBurger extends HTMLElement {
 	cursor: pointer;
 }
 :host div {
-	position: relative;
 	opacity: 1;
 	transition: transform .6s cubic-bezier(0.13, 0.49, 0.29, 0.87),
 		opacity .6s cubic-bezier(0.13, 0.49, 0.29, 0.87);
@@ -25,16 +29,13 @@ class InfinityBurger extends HTMLElement {
 :host div.${InfinityBurger.classes.animate} {
 	opacity: 0;
 }
-:host div,
-:host div:before,
-:host div:after {
+:host div {
 	display: block;
-	border-top: 3px solid #666;
-	padding-bottom: 3px;
-	background-color: transparent;
+	padding-bottom: ${InfinityBurger.props.height}px;
+	border-top: ${InfinityBurger.props.height}px solid var(--ib-_color);
 }`;
 
-	static getRandomNumber( min, max ) {
+	static random( min, max ) {
 		return Math.floor( Math.random() * ( max - min + 1 ) ) + min;
 	}
 
@@ -45,12 +46,19 @@ class InfinityBurger extends HTMLElement {
 		return this._node;
 	}
 
+	get documentWidth() {
+		if(!this._width) {
+			let docEl = document.documentElement;
+			this._width = Math.max( docEl.clientWidth, docEl.scrollWidth );
+		}
+
+		return this._width;
+	}
+
 	get documentHeight() {
 		if(!this._height) {
 			let docEl = document.documentElement;
-			let body = document.body;
-
-			this._height = Math.max( body.scrollHeight, body.offsetHeight, docEl.clientHeight, docEl.scrollHeight, docEl.offsetHeight );
+			this._height = Math.max( docEl.clientHeight, docEl.scrollHeight );
 		}
 
 		return this._height;
@@ -82,7 +90,7 @@ class InfinityBurger extends HTMLElement {
 				this._state = 0;
 				requestAnimationFrame(() => this.reset(root));
 			} else {
-				// keep adding hamburger layers
+				// start adding hamburger layers
 				this._state = 1;
 				requestAnimationFrame( () => this.addLayer(root) );
 			}
@@ -90,6 +98,8 @@ class InfinityBurger extends HTMLElement {
 	}
 
 	reset(root) {
+		this._count = 0;
+
 		root.replaceChildren();
 		for(let j=0, k=3; j<k; j++) {
 			root.appendChild(this.node.cloneNode(false));
@@ -97,12 +107,18 @@ class InfinityBurger extends HTMLElement {
 	}
 
 	addLayer(root) {
-		this._xCoordinate += InfinityBurger.getRandomNumber(-10, 2 );
+		// Go to the opposite corner
+		let offset = -1 * this.documentWidth / (this.documentHeight / (InfinityBurger.props.height*2));
+		this._xCoordinate += offset + InfinityBurger.random(-6, 6);
 
 		let div = this.node.cloneNode(false);
 		div.classList.add(InfinityBurger.classes.animate);
 		div.style.transform = 'translateX(' + Math.min(this._xCoordinate, 0) + 'px)';
+		if(typeof InfinityBurgerColor === "function") {
+			div.style.borderColor = InfinityBurgerColor(this._count);
+		}
 		root.appendChild( div );
+		this._count++;
 
 		this.offsetWidth; // force a repaint
 		div.classList.remove(InfinityBurger.classes.animate);
