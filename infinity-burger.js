@@ -13,6 +13,10 @@ class InfinityBurger extends HTMLElement {
 		height: 3 // integer
 	};
 
+	static attrs = {
+		themeFunction: "theme-fn"
+	};
+
 	static css = `:host {
 	--ib-_color: var(--ib-color, #666);
 	position: absolute;
@@ -79,6 +83,7 @@ class InfinityBurger extends HTMLElement {
 
 		this._xCoordinate = 0;
 		this._state = 0;
+		this._isThemed = this.hasAttribute(InfinityBurger.attrs.themeFunction);
 
 		this.reset(root);
 
@@ -114,7 +119,7 @@ class InfinityBurger extends HTMLElement {
 		let div = this.node.cloneNode(false);
 		div.classList.add(InfinityBurger.classes.animate);
 		div.style.transform = 'translateX(' + Math.min(this._xCoordinate, 0) + 'px)';
-		if(typeof InfinityBurgerColor === "function") {
+		if(this._isThemed && typeof InfinityBurgerColor === "function") {
 			div.style.borderColor = InfinityBurgerColor(this._count);
 		}
 		root.appendChild( div );

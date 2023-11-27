@@ -9,15 +9,18 @@
 		height: 200vh;
 	}
 	</style>
-	<script>
-	function InfinityBurgerColor(count) {
-		return `hsl(${count * 5 % 360}, 100%, 50%)`
-	}
-	</script>
 	<script type="module" src="infinity-burger.js"></script>
 </head>
 <body>
 	<a href="https://github.com/zachleat/infinity-burger">Back to the source code.</a>
 	<infinity-burger></infinity-burger>
+
+	<!-- Use the InfinityBurgerColor global function to theme -->
+	<!-- <script>
+	function InfinityBurgerColor(count) {
+		return `hsl(${count * 5 % 360}, 100%, 50%)`
+	}
+	</script>
+	<infinity-burger theme-fn></infinity-burger> -->
 </body>
 </html>
